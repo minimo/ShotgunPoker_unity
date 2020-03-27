@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 1161354260986928719}
   - component: {fileID: 1161354260986928704}
   - component: {fileID: 1161354260986928718}
-  - component: {fileID: 4578903728853929695}
+  - component: {fileID: 1047054202987165850}
+  - component: {fileID: 3731668540954836275}
   m_Layer: 0
   m_Name: Card
   m_TagString: Untagged
@@ -94,8 +95,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2287f41b462a34a2abfadf208bb99262, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  retroSprite: {fileID: 4578903728853929695}
---- !u!114 &4578903728853929695
+--- !u!61 &1047054202987165850
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161354260986928705}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 10.769231, y: 16.153847}
+    newSize: {x: 10.769231, y: 16.153847}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 10.769231, y: 16.153847}
+  m_EdgeRadius: 0
+--- !u!114 &3731668540954836275
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104,76 +130,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 1161354260986928705}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ccad1f0ba6104c0bb2e036b901553f2, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sprite: {fileID: 21300000, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  SortingLayer: Default
-  SortOrder: 1
-  _sprites:
-  - {fileID: 21300000, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300002, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300004, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300006, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300008, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300010, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300012, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300014, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300016, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300018, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300020, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300022, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300024, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300026, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300028, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300030, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300032, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300034, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300036, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300038, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300040, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300042, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300044, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300046, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300048, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300050, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300052, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300054, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300056, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300058, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300060, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300062, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300064, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300066, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300068, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300070, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300072, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300074, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300076, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300078, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300080, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300082, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300084, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300086, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300088, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300090, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300092, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300094, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300096, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300098, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300100, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300102, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300104, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300106, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300108, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300110, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300112, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300114, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300116, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300118, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300120, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300122, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300124, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300126, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  - {fileID: 21300128, guid: 7a2c8b22b9e52462891ca364cd70177b, type: 3}
-  _spriteRenderer: {fileID: 1161354260986928704}
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1161354260986928718}
+          m_MethodName: onTouch
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null

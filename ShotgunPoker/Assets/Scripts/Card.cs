@@ -10,8 +10,7 @@ public class Card : MonoBehaviour
     int _num = 1;
     bool _isReverse = false;
     bool _isJoker = false;
-    [SerializeField] RetroSprite retroSprite;
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -23,8 +22,16 @@ public class Card : MonoBehaviour
         if (_isReverse) setFrameIndex(53);
     }
 
+    public Sprite GetSprite(string fileName , string spriteName) {
+        Sprite[] sprites = Resources.LoadAll<Sprite>(fileName);
+        return System.Array.Find<Sprite>(sprites, (sprite) => sprite.name.Equals(spriteName));
+    }
+
     public void setFrameIndex(int index) {
-        retroSprite.setFrameIndex(index);
+        string name = "trump_" + index;
+        Sprite sp = GetSprite("Textures/trump", name);
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        sr.sprite = sp;
     }
 
     public void setData(int suit, int num) {
@@ -49,5 +56,9 @@ public class Card : MonoBehaviour
 
     public bool isReverse() {
         return _isReverse;
+    }
+
+    public void onTouch() {
+        Debug.Log("touch");
     }
 }

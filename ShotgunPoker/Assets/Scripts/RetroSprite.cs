@@ -40,7 +40,7 @@ public class RetroSprite : MonoBehaviour {
             {
                 _sprites[i] = (Sprite)data[i];
             }
-            // Debug.Log("Set sprite " + AssetDatabase.GetAssetPath(sprite) + " and created an array of sprites of length " + _sprites.Length );
+            Debug.Log("Set sprite " + AssetDatabase.GetAssetPath(sprite) + " and created an array of sprites of length " + _sprites.Length );
         }
     }
 
