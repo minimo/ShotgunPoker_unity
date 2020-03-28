@@ -27,7 +27,7 @@ public class GameController : MonoBehaviour
 
     void enterCard(int index, float x, float y, float r) {
         GameObject card;
-        card = Instantiate((GameObject)Resources.Load("Card"));
+        card = Instantiate((GameObject)Resources.Load("PreFab/Card"));
         card.transform.SetParent(this.transform);
         card.transform.position = new Vector3(x, y, 0.0f);
         card.transform.rotation = Quaternion.Euler(0.0f, 0.0f, r);
