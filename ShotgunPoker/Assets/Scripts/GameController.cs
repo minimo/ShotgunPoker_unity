@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    [SerializeField] GameObject HandChecker;
     // Start is called before the first frame update
     void Start()
     {

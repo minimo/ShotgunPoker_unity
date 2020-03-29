@@ -358,6 +358,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cd598397cdc145b1a246a0719d4b4a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HandChecker: {fileID: 210824832}
 --- !u!4 &688795047
 Transform:
   m_ObjectHideFlags: 0
