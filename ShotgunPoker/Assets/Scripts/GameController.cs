@@ -66,17 +66,34 @@ public class GameController : MonoBehaviour
 
     public void AddCard(GameObject card)
     {
+        Sequence seq = DOTween.Sequence();
         float x = -2.0f + hands.Count * 0.5f;
-        card.transform.DOMove(new Vector3(x, -5.0f, hands.Count * 0.1f), 0.2f);
-        card.transform.DORotate(new Vector3(0.0f, 0.0f, 0.0f), 0.2f);
-        hands.Add(card);
-        if (hands.Count == 5) {
-
-            complete();
-        }
+        seq.Append(card.transform.DOMove(new Vector3(x, -5.0f, hands.Count * 0.1f), 0.2f));
+        seq.Join(card.transform.DORotate(new Vector3(0.0f, 0.0f, 0.0f), 0.2f));
+        seq.OnComplete(() => {
+            hands.Add(card);
+            if (hands.Count == 5) {
+                complete();
+            }
+        });
     }
 
     void complete() {
-
+        Sequence seq = DOTween.Sequence();
+        hands.ForEach(card => {
+            seq.Join(card.transform.DOMove(new Vector3(-2.0f, -5.0f), 0.2f));
+        });
+        seq.AppendCallback(() => {
+            hands.Sort((a,b) => b.GetComponent<Card>().getNumber() - a.GetComponent<Card>().getNumber());
+            int count = 0;
+            hands.ForEach(card => {
+                Vector3 p = card.transform.position;
+                card.transform.position = new Vector3(p.x, p.y, count * 0.1f);
+                float x = -2.0f + count * 0.5f;
+                seq.Join(card.transform.DOMove(new Vector3(x, -5.0f, count * 0.1f), 0.2f));
+                count++;
+            });
+            Debug.Log("append");
+        });
     }
 }

@@ -35,9 +35,17 @@ public class Card : MonoBehaviour
         return this;
     }
 
-    public Card setData(int suit, int num) {
+    public Card setData(int suit, int num, bool isJoker) {
         int index = suit * 13 + num - 1;
-        if (_isJoker) index = 4 * 13 + 2;
+        if (isJoker) {
+            index = 4 * 13 + 2;
+            _isJoker = true;
+            _suit = 0;
+            _num = 0;
+        } else {
+            _suit = suit;
+            _num = num;
+        }
         setFrameIndex(index);
         return this;
     }
@@ -46,6 +54,14 @@ public class Card : MonoBehaviour
         _isJoker = true;
         setFrameIndex(4 * 13 + 2);
         return this;
+    }
+
+    public int getSuit() {
+        return _suit;
+    }
+
+    public int getNumber() {
+        return _num;
     }
 
     public bool isJoker() {
