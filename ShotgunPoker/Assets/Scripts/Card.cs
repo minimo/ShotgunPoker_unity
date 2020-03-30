@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 
 public class Card : MonoBehaviour
 {
@@ -11,7 +10,7 @@ public class Card : MonoBehaviour
     int _num = 1;
     bool _isReverse = false;
     bool _isJoker = false;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,31 +27,34 @@ public class Card : MonoBehaviour
         return System.Array.Find<Sprite>(sprites, (sprite) => sprite.name.Equals(spriteName));
     }
 
-    public void setFrameIndex(int index) {
+    public Card setFrameIndex(int index) {
         string name = "trump_" + index;
         Sprite sp = GetSprite("Textures/trump", name);
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         sr.sprite = sp;
+        return this;
     }
 
-    public void setData(int suit, int num) {
+    public Card setData(int suit, int num) {
         int index = suit * 13 + num - 1;
         if (_isJoker) index = 4 * 13 + 2;
         setFrameIndex(index);
+        return this;
     }
 
-    public void joker() {
+    public Card joker() {
         _isJoker = true;
-        int index = 4 * 13 + 2;
-        setFrameIndex(index);
+        setFrameIndex(4 * 13 + 2);
+        return this;
     }
 
     public bool isJoker() {
         return _isJoker;
     }
 
-    public void reverse(bool flag) {
+    public Card reverse(bool flag) {
         _isReverse = flag;
+        return this;
     }
 
     public bool isReverse() {
@@ -60,6 +62,6 @@ public class Card : MonoBehaviour
     }
 
     public void onTouch() {
-        Debug.Log("touch");
+        this.transform.parent.gameObject.SendMessage("AddCard", this.gameObject);
     }
 }

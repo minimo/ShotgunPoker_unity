@@ -1,10 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
+using System.Linq;
 
 public class GameController : MonoBehaviour
 {
     [SerializeField] GameObject HandChecker;
+    List<GameObject> hands = new List<GameObject>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -17,21 +21,62 @@ public class GameController : MonoBehaviour
         
     }
 
-    void setupCardDeck() {
-        for (int i = 0; i < 52; i++) {
-            float x = Random.Range(-2.0f, 2.0f);
-            float y = Random.Range(-3.0f, 3.0f);
-            float r = Random.Range(0, 359);
-            enterCard(i, x, y, r);
+    void setupCardDeck()
+    {
+        List<GameObject> cards = new List<GameObject>();
+        for (int s = 0; s < 4; s++) {
+            for (int n = 0; n < 13; n++) {
+                float x = Random.Range(-2.0f, 2.0f);
+                float y = Random.Range(-3.0f, 3.0f);
+                float r = Random.Range(0, 359);
+                GameObject card = enterCard(s, n, false);
+                card.transform.position = new Vector3(x, y, 0.0f);
+                card.transform.rotation = Quaternion.Euler(0.0f, 0.0f, r);
+                cards.Add(card);
+            }
         }
+        //シャッフル
+        for (int i = 0; i < cards.Count; i++) {
+            GameObject temp = cards[i];
+            int randomIndex = Random.Range(0, cards.Count);
+            cards[i] = cards[randomIndex];
+            cards[randomIndex] = temp;
+        }
+        int count = 0;
+        cards.ForEach(card => {
+            Vector3 p = card.transform.position;
+            card.transform.position = new Vector3(p.x, p.y, count * 0.1f);
+            count++;
+        });
     }
 
-    void enterCard(int index, float x, float y, float r) {
+    GameObject enterCard(int suit, int num, bool isJoker = false)
+    {
         GameObject card;
         card = Instantiate((GameObject)Resources.Load("PreFab/Card"));
         card.transform.SetParent(this.transform);
-        card.transform.position = new Vector3(x, y, 0.0f);
-        card.transform.rotation = Quaternion.Euler(0.0f, 0.0f, r);
-        card.GetComponent<Card>().setFrameIndex(index);
+        if (!isJoker) {
+            int index = suit * 13 + num;
+            card.GetComponent<Card>().setFrameIndex(index);
+        } else {
+            card.GetComponent<Card>().joker();
+        }
+        return card;
+    }
+
+    public void AddCard(GameObject card)
+    {
+        float x = -2.0f + hands.Count * 0.5f;
+        card.transform.DOMove(new Vector3(x, -5.0f, hands.Count * 0.1f), 0.2f);
+        card.transform.DORotate(new Vector3(0.0f, 0.0f, 0.0f), 0.2f);
+        hands.Add(card);
+        if (hands.Count == 5) {
+
+            complete();
+        }
+    }
+
+    void complete() {
+
     }
 }
