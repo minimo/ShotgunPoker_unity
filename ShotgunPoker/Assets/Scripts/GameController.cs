@@ -29,7 +29,7 @@ public class GameController : MonoBehaviour
                 float x = Random.Range(-2.0f, 2.0f);
                 float y = Random.Range(-3.0f, 3.0f);
                 float r = Random.Range(0, 359);
-                GameObject card = enterCard(s, n, false);
+                GameObject card = enterCard(s, n + 1, false);
                 card.transform.position = new Vector3(x, y, 0.0f);
                 card.transform.rotation = Quaternion.Euler(0.0f, 0.0f, r);
                 cards.Add(card);
@@ -55,12 +55,7 @@ public class GameController : MonoBehaviour
         GameObject card;
         card = Instantiate((GameObject)Resources.Load("PreFab/Card"));
         card.transform.SetParent(this.transform);
-        if (!isJoker) {
-            int index = suit * 13 + num;
-            card.GetComponent<Card>().setFrameIndex(index);
-        } else {
-            card.GetComponent<Card>().joker();
-        }
+        card.GetComponent<Card>().setData(suit, num, isJoker);
         return card;
     }
 
@@ -84,7 +79,7 @@ public class GameController : MonoBehaviour
             seq.Join(card.transform.DOMove(new Vector3(-2.0f, -5.0f), 0.2f));
         });
         seq.AppendCallback(() => {
-            hands.Sort((a,b) => b.GetComponent<Card>().getNumber() - a.GetComponent<Card>().getNumber());
+            hands.Sort((a, b) => a.GetComponent<Card>().sortKey - b.GetComponent<Card>().sortKey);
             int count = 0;
             hands.ForEach(card => {
                 Vector3 p = card.transform.position;
@@ -93,7 +88,6 @@ public class GameController : MonoBehaviour
                 seq.Join(card.transform.DOMove(new Vector3(x, -5.0f, count * 0.1f), 0.2f));
                 count++;
             });
-            Debug.Log("append");
         });
     }
 }

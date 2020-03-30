@@ -11,6 +11,8 @@ public class Card : MonoBehaviour
     bool _isReverse = false;
     bool _isJoker = false;
 
+    public int sortKey = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,9 +44,15 @@ public class Card : MonoBehaviour
             _isJoker = true;
             _suit = 0;
             _num = 0;
+            sortKey = 15;
         } else {
             _suit = suit;
             _num = num;
+            if (_num == 1) {
+                sortKey = 13;
+            } else {
+                sortKey = _num;
+            }
         }
         setFrameIndex(index);
         return this;
@@ -78,6 +86,6 @@ public class Card : MonoBehaviour
     }
 
     public void onTouch() {
-        this.transform.parent.gameObject.SendMessage("AddCard", this.gameObject);
+        this.transform.parent.gameObject.GetComponent<GameController>().AddCard(this.gameObject);
     }
 }
