@@ -75,9 +75,7 @@ public class GameController : MonoBehaviour
 
     void complete() {
         Sequence seq = DOTween.Sequence();
-        hands.ForEach(card => {
-            seq.Join(card.transform.DOMove(new Vector3(-2.0f, -5.0f), 0.2f));
-        });
+        hands.ForEach(card => seq.Join(card.transform.DOMove(new Vector3(-2.0f, -5.0f), 0.2f)));
         seq.AppendCallback(() => {
             hands.Sort((a, b) => a.GetComponent<Card>().sortKey - b.GetComponent<Card>().sortKey);
             int count = 0;
@@ -88,6 +86,8 @@ public class GameController : MonoBehaviour
                 seq.Join(card.transform.DOMove(new Vector3(x, -5.0f, count * 0.1f), 0.2f));
                 count++;
             });
+            PokerHand result = GetComponent<HandChecker>().check(hands);
+            Debug.Log(GetComponent<HandChecker>().getHandName(result));
         });
     }
 }

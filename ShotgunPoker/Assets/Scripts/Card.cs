@@ -44,15 +44,11 @@ public class Card : MonoBehaviour
             _isJoker = true;
             _suit = 0;
             _num = 0;
-            sortKey = 15;
+            sortKey = 99;
         } else {
             _suit = suit;
             _num = num;
-            if (_num == 1) {
-                sortKey = 13;
-            } else {
-                sortKey = _num;
-            }
+            sortKey = _num;
         }
         setFrameIndex(index);
         return this;
