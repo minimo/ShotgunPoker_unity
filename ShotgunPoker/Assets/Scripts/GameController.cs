@@ -79,6 +79,10 @@ public class GameController : MonoBehaviour
         });
     }
 
+    public void shuffle() {
+        
+    }
+
     void complete() {
         isDisableTouch = true;
         int count = 0;
@@ -86,10 +90,12 @@ public class GameController : MonoBehaviour
         hands.ForEach(card => {
             float x = -2.0f + count * 0.5f;
             var seq = DOTween.Sequence();
+            card.GetComponent<Card>().reverse(true);
             seq.Append(card.transform.DOMove(new Vector3(-2.0f, -5.0f), 0.2f))
                 .AppendCallback(() => {
                     Vector3 p = card.transform.position;
                     card.transform.position = new Vector3(p.x, p.y, count * -0.1f);
+                    card.GetComponent<Card>().reverse(false);
                 })
                 .Append(card.transform.DOMove(new Vector3(x, -5.0f, count * -0.1f), 0.2f));
             if (count == 4) {
@@ -126,8 +132,8 @@ public class GameController : MonoBehaviour
             float y = Random.Range(-3.0f, 3.0f);
             float r = Random.Range(0, 359);
             card.transform.position = new Vector3(x, p.y);
-            card.transform.DOMove(new Vector3(x, y), 0.2f);
-            card.transform.DORotate(new Vector3(0, 0, r), 0.2f);
+            card.transform.DOMove(new Vector3(x, y), 0.5f);
+            card.transform.DORotate(new Vector3(0, 0, r), 0.5f);
         });
     }
 }

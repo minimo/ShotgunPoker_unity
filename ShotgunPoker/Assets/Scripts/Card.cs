@@ -74,6 +74,11 @@ public class Card : MonoBehaviour
 
     public Card reverse(bool flag) {
         _isReverse = flag;
+        if (flag) {
+            setFrameIndex(52);
+        } else {
+            setData(_suit, _num, _isJoker);
+        }
         return this;
     }
 
