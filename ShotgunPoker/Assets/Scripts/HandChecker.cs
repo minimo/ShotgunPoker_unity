@@ -83,7 +83,6 @@ public class HandChecker : MonoBehaviour
             }
             return result;
         }
-        bool three = false;
         if (numbers[0] == numbers[2] || numbers[1] == numbers[3] || numbers[2] == numbers[4]) {
             if (inJoker) {
                 result.isFourCard = true;

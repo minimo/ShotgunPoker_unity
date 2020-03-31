@@ -10,6 +10,9 @@ public class GameController : MonoBehaviour
 {
     [SerializeField] GameObject HandChecker;
     List<GameObject> hands = new List<GameObject>();
+    List<GameObject> outsideCards = new List<GameObject>();
+
+    bool isDisableTouch = false;
 
     // Start is called before the first frame update
     void Start()
@@ -63,6 +66,7 @@ public class GameController : MonoBehaviour
 
     public void AddCard(GameObject card)
     {
+        if (isDisableTouch) return;
         Sequence seq = DOTween.Sequence();
         float x = -2.0f + hands.Count * 0.5f;
         seq.Append(card.transform.DOMove(new Vector3(x, -5.0f, hands.Count * -0.1f), 0.2f));
@@ -76,6 +80,7 @@ public class GameController : MonoBehaviour
     }
 
     void complete() {
+        isDisableTouch = true;
         int count = 0;
         hands.Sort((a, b) => a.GetComponent<Card>().sortKey - b.GetComponent<Card>().sortKey);
         hands.ForEach(card => {
@@ -98,14 +103,31 @@ public class GameController : MonoBehaviour
         Debug.Log(GetComponent<HandChecker>().getHandName(result));
     }
 
+    //手札を場から下げる
     void exitCard() {
         int count = 0;
         hands.ForEach(card => {
             Vector3 p = card.transform.position;
             card.transform.DOMove(new Vector3(p.x, p.y - 3.0f), 0.2f);
+            outsideCards.Add(card);
             count++;
         });
         hands.Clear();
+        isDisableTouch = false;
         Debug.Log("exit card");
+        if (outsideCards.Count > 19) returnCard();
+    }
+
+    //下げられたカードを場に戻す
+    void returnCard() {
+        outsideCards.ForEach(card => {
+            Vector3 p = card.transform.position;
+            float x = Random.Range(-2.0f, 2.0f);
+            float y = Random.Range(-3.0f, 3.0f);
+            float r = Random.Range(0, 359);
+            card.transform.position = new Vector3(x, p.y);
+            card.transform.DOMove(new Vector3(x, y), 0.2f);
+            card.transform.DORotate(new Vector3(0, 0, r), 0.2f);
+        });
     }
 }
