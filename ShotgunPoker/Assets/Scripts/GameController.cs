@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 public class GameController : MonoBehaviour
 {
@@ -63,7 +65,7 @@ public class GameController : MonoBehaviour
     {
         Sequence seq = DOTween.Sequence();
         float x = -2.0f + hands.Count * 0.5f;
-        seq.Append(card.transform.DOMove(new Vector3(x, -5.0f, hands.Count * 0.1f), 0.2f));
+        seq.Append(card.transform.DOMove(new Vector3(x, -5.0f, hands.Count * -0.1f), 0.2f));
         seq.Join(card.transform.DORotate(new Vector3(0.0f, 0.0f, 0.0f), 0.2f));
         seq.OnComplete(() => {
             hands.Add(card);
@@ -74,20 +76,36 @@ public class GameController : MonoBehaviour
     }
 
     void complete() {
-        Sequence seq = DOTween.Sequence();
-        hands.ForEach(card => seq.Join(card.transform.DOMove(new Vector3(-2.0f, -5.0f), 0.2f)));
-        seq.AppendCallback(() => {
-            hands.Sort((a, b) => a.GetComponent<Card>().sortKey - b.GetComponent<Card>().sortKey);
-            int count = 0;
-            hands.ForEach(card => {
-                Vector3 p = card.transform.position;
-                card.transform.position = new Vector3(p.x, p.y, count * 0.1f);
-                float x = -2.0f + count * 0.5f;
-                seq.Join(card.transform.DOMove(new Vector3(x, -5.0f, count * 0.1f), 0.2f));
-                count++;
-            });
-            PokerHand result = GetComponent<HandChecker>().check(hands);
-            Debug.Log(GetComponent<HandChecker>().getHandName(result));
+        int count = 0;
+        hands.Sort((a, b) => a.GetComponent<Card>().sortKey - b.GetComponent<Card>().sortKey);
+        hands.ForEach(card => {
+            float x = -2.0f + count * 0.5f;
+            var seq = DOTween.Sequence();
+            seq.Append(card.transform.DOMove(new Vector3(-2.0f, -5.0f), 0.2f))
+                .AppendCallback(() => {
+                    Vector3 p = card.transform.position;
+                    card.transform.position = new Vector3(p.x, p.y, count * -0.1f);
+                })
+                .Append(card.transform.DOMove(new Vector3(x, -5.0f, count * -0.1f), 0.2f));
+            if (count == 4) {
+                seq.AppendInterval(0.5f)
+                    .AppendCallback(() => exitCard());
+            }
+            count++;
         });
+
+        PokerHand result = GetComponent<HandChecker>().check(hands);
+        Debug.Log(GetComponent<HandChecker>().getHandName(result));
+    }
+
+    void exitCard() {
+        int count = 0;
+        hands.ForEach(card => {
+            Vector3 p = card.transform.position;
+            card.transform.DOMove(new Vector3(p.x, p.y - 3.0f), 0.2f);
+            count++;
+        });
+        hands.Clear();
+        Debug.Log("exit card");
     }
 }
