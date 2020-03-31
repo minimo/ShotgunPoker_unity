@@ -67,12 +67,13 @@ public class GameController : MonoBehaviour
     public void AddCard(GameObject card)
     {
         if (isDisableTouch) return;
+        int count = hands.Count;
+        hands.Add(card);
         Sequence seq = DOTween.Sequence();
-        float x = -2.0f + hands.Count * 0.5f;
-        seq.Append(card.transform.DOMove(new Vector3(x, -5.0f, hands.Count * -0.1f), 0.2f));
+        float x = -2.0f + count * 0.5f;
+        seq.Append(card.transform.DOMove(new Vector3(x, -5.0f, count * -0.1f), 0.2f));
         seq.Join(card.transform.DORotate(new Vector3(0.0f, 0.0f, 0.0f), 0.2f));
         seq.OnComplete(() => {
-            hands.Add(card);
             if (hands.Count == 5) {
                 complete();
             }
@@ -135,5 +136,6 @@ public class GameController : MonoBehaviour
             card.transform.DOMove(new Vector3(x, y), 0.5f);
             card.transform.DORotate(new Vector3(0, 0, r), 0.5f);
         });
+        outsideCards.Clear();
     }
 }
