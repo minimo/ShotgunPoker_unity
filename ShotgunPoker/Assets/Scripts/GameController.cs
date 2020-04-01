@@ -138,6 +138,7 @@ public class GameController : MonoBehaviour
 
     public void shuffle() {
         isDisableTouch = true;
+        int count = 1;
         foreach (Transform childTransform in transform) {
             if (childTransform.gameObject.name == "OutSide") continue;
             float x = Random.Range(-2.0f, 2.0f);
@@ -147,6 +148,8 @@ public class GameController : MonoBehaviour
             seq.Append(childTransform.transform.DOMove(new Vector3(x, y), 0.75f).SetEase(Ease.InOutSine));
             seq.Join(childTransform.transform.DORotate(new Vector3(0.0f, 0.0f, r), 0.75f));
             seq.AppendCallback(() => isDisableTouch = false);
+            childTransform.gameObject.GetComponentInParent<Card>().setZOrder(count);
+            count++;
         }
     }
 
