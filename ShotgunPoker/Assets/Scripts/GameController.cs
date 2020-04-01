@@ -16,7 +16,9 @@ public class GameController : MonoBehaviour
 
     bool isDisableTouch = false;
 
-    // Start is called before the first frame update
+    private Vector3 touchStartPos;
+    private Vector3 touchEndPos;
+
     void Start()
     {
         outSide = new GameObject();
@@ -28,8 +30,51 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        detectFlick();
     }
+
+    void detectFlick(){
+        if (Input.GetKeyDown(KeyCode.Mouse0)){
+            touchStartPos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
+        }
+
+        if (Input.GetKeyUp(KeyCode.Mouse0)){
+            touchEndPos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
+            float directionX = touchEndPos.x - touchStartPos.x;
+            float directionY = touchEndPos.y - touchStartPos.y;
+            string flickDir = "";
+            if (Mathf.Abs(directionY) < Mathf.Abs(directionX)) {
+                Debug.Log(directionX);
+                if (Mathf.Abs(directionX) > 600) {
+                    if (600 < directionX){
+                        //右向きにフリック
+                        flickDir = "right";
+                    } else if (-600 > directionX){
+                        //左向きにフリック
+                        flickDir = "left";
+                    }
+                }
+            } else if (Mathf.Abs(directionX) < Mathf.Abs(directionY)) {
+                if (130 < directionY){
+                    //上向きにフリック
+                    flickDir = "up";
+                } else if (-30 > directionY) {
+                    //下向きのフリック
+                    flickDir = "down";
+                }
+            } else {
+                //タッチを検出
+                flickDir = "touch";
+            }
+            switch(flickDir) {
+                case "right":
+                case "left":
+                    shuffle();
+                    break;
+            }
+        }
+    }
+
 
     void setupCardDeck()
     {
@@ -94,6 +139,7 @@ public class GameController : MonoBehaviour
     public void shuffle() {
         isDisableTouch = true;
         foreach (Transform childTransform in transform) {
+            if (childTransform.gameObject.name == "OutSide") continue;
             float x = Random.Range(-2.0f, 2.0f);
             float y = Random.Range(-3.0f, 3.0f);
             float r = Random.Range(0, 359);
@@ -112,7 +158,7 @@ public class GameController : MonoBehaviour
             float x = -1.0f + count * 0.5f;
             var seq = DOTween.Sequence();
             card.GetComponent<Card>().reverse(true);
-            seq.Append(card.transform.DOMove(new Vector3(-2.0f, -5.0f), 0.2f))
+            seq.Append(card.transform.DOMove(new Vector3(-1.0f, -5.0f), 0.2f))
                 .AppendCallback(() => {
                     Vector3 p = card.transform.position;
                     card.transform.position = new Vector3(p.x, p.y, count * -0.00f);
