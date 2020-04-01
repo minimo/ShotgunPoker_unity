@@ -12,11 +12,16 @@ public class GameController : MonoBehaviour
     List<GameObject> hands = new List<GameObject>();
     List<GameObject> outsideCards = new List<GameObject>();
 
+    GameObject outSide;
+
     bool isDisableTouch = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        outSide = new GameObject();
+        outSide.name = "OutSide";
+        outSide.transform.SetParent(this.transform);
         setupCardDeck();
     }
 
@@ -50,57 +55,73 @@ public class GameController : MonoBehaviour
         int count = 0;
         cards.ForEach(card => {
             Vector3 p = card.transform.position;
-            card.transform.position = new Vector3(p.x, p.y, count * 0.1f);
+            card.transform.position = new Vector3(p.x, p.y);
+            card.GetComponent<Card>().setZOrder(count + 1);
             count++;
         });
     }
 
-    GameObject enterCard(int suit, int num, bool isJoker = false)
+    GameObject enterCard(int suit, int num, bool isJoker = false, int order = 1)
     {
         GameObject card;
         card = Instantiate((GameObject)Resources.Load("PreFab/Card"));
         card.transform.SetParent(this.transform);
         card.GetComponent<Card>().setData(suit, num, isJoker);
+        card.GetComponent<Card>().setZOrder(order);
         return card;
     }
 
-    public void AddCard(GameObject card)
+    public void addHand(GameObject card)
     {
         if (isDisableTouch) return;
-        int count = hands.Count;
+        card.transform.SetParent(outSide.transform);
+        float x = -1.0f + hands.Count * 0.5f;
+        float y = -5.0f;
         hands.Add(card);
+        if (hands.Count == 5) isDisableTouch = true;
+        int _count = hands.Count;
         Sequence seq = DOTween.Sequence();
-        float x = -2.0f + count * 0.5f;
-        seq.Append(card.transform.DOMove(new Vector3(x, -5.0f, count * -0.1f), 0.2f));
+        seq.Append(card.transform.DOMove(new Vector3(x, y), 0.2f).SetEase(Ease.InOutSine));
         seq.Join(card.transform.DORotate(new Vector3(0.0f, 0.0f, 0.0f), 0.2f));
         seq.OnComplete(() => {
-            if (hands.Count == 5) {
+            card.GetComponent<Card>().setZOrder(_count);
+            if (_count == 5) {
                 complete();
             }
         });
     }
 
     public void shuffle() {
-        
+        isDisableTouch = true;
+        foreach (Transform childTransform in transform) {
+            float x = Random.Range(-2.0f, 2.0f);
+            float y = Random.Range(-3.0f, 3.0f);
+            float r = Random.Range(0, 359);
+            Sequence seq = DOTween.Sequence();
+            seq.Append(childTransform.transform.DOMove(new Vector3(x, y), 0.75f).SetEase(Ease.InOutSine));
+            seq.Join(childTransform.transform.DORotate(new Vector3(0.0f, 0.0f, r), 0.75f));
+            seq.AppendCallback(() => isDisableTouch = false);
+        }
     }
 
     void complete() {
-        isDisableTouch = true;
         int count = 0;
         hands.Sort((a, b) => a.GetComponent<Card>().sortKey - b.GetComponent<Card>().sortKey);
         hands.ForEach(card => {
-            float x = -2.0f + count * 0.5f;
+            int _count = count;
+            float x = -1.0f + count * 0.5f;
             var seq = DOTween.Sequence();
             card.GetComponent<Card>().reverse(true);
             seq.Append(card.transform.DOMove(new Vector3(-2.0f, -5.0f), 0.2f))
                 .AppendCallback(() => {
                     Vector3 p = card.transform.position;
-                    card.transform.position = new Vector3(p.x, p.y, count * -0.1f);
+                    card.transform.position = new Vector3(p.x, p.y, count * -0.00f);
                     card.GetComponent<Card>().reverse(false);
+                    card.GetComponent<Card>().setZOrder(_count + 1);
                 })
-                .Append(card.transform.DOMove(new Vector3(x, -5.0f, count * -0.1f), 0.2f));
+                .Append(card.transform.DOMove(new Vector3(x, -5.0f, count * -0.00f), 0.2f));
             if (count == 4) {
-                seq.AppendInterval(0.5f)
+                seq.AppendInterval(1.0f)
                     .AppendCallback(() => exitCard());
             }
             count++;
@@ -127,14 +148,16 @@ public class GameController : MonoBehaviour
 
     //下げられたカードを場に戻す
     void returnCard() {
+        shuffle();
         outsideCards.ForEach(card => {
             Vector3 p = card.transform.position;
             float x = Random.Range(-2.0f, 2.0f);
             float y = Random.Range(-3.0f, 3.0f);
             float r = Random.Range(0, 359);
             card.transform.position = new Vector3(x, p.y);
-            card.transform.DOMove(new Vector3(x, y), 0.5f);
-            card.transform.DORotate(new Vector3(0, 0, r), 0.5f);
+            card.transform.DOMove(new Vector3(x, y), 0.75f).SetEase(Ease.OutQuad);
+            card.transform.DORotate(new Vector3(0, 0, r), 0.75f);
+            card.transform.SetParent(this.transform);
         });
         outsideCards.Clear();
     }

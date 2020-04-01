@@ -54,6 +54,11 @@ public class Card : MonoBehaviour
         return this;
     }
 
+    public void setZOrder(int z = 1) {
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.sortingOrder = z;
+    }
+
     public Card joker() {
         _isJoker = true;
         setFrameIndex(4 * 13 + 2);
@@ -87,6 +92,8 @@ public class Card : MonoBehaviour
     }
 
     public void onTouch() {
-        this.transform.parent.gameObject.GetComponent<GameController>().AddCard(this.gameObject);
+        GameController gc = this.transform.parent.gameObject.GetComponent<GameController>();
+        if (!gc) return;
+        gc.addHand(this.gameObject);
     }
 }
