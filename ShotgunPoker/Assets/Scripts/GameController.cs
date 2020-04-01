@@ -145,8 +145,8 @@ public class GameController : MonoBehaviour
             float y = Random.Range(-3.0f, 3.0f);
             float r = Random.Range(0, 359);
             Sequence seq = DOTween.Sequence();
-            seq.Append(childTransform.transform.DOMove(new Vector3(x, y), 0.75f).SetEase(Ease.InOutSine));
-            seq.Join(childTransform.transform.DORotate(new Vector3(0.0f, 0.0f, r), 0.75f));
+            seq.Append(childTransform.transform.DOMove(new Vector3(x, y), 0.5f).SetEase(Ease.InOutSine));
+            seq.Join(childTransform.transform.DORotate(new Vector3(0.0f, 0.0f, r), 0.5f));
             seq.AppendCallback(() => isDisableTouch = false);
             childTransform.gameObject.GetComponentInParent<Card>().setZOrder(count);
             count++;
@@ -204,8 +204,8 @@ public class GameController : MonoBehaviour
             float y = Random.Range(-3.0f, 3.0f);
             float r = Random.Range(0, 359);
             card.transform.position = new Vector3(x, p.y);
-            card.transform.DOMove(new Vector3(x, y), 0.75f).SetEase(Ease.OutQuad);
-            card.transform.DORotate(new Vector3(0, 0, r), 0.75f);
+            card.transform.DOMove(new Vector3(x, y), 0.5f).SetEase(Ease.OutQuad);
+            card.transform.DORotate(new Vector3(0, 0, r), 0.5f);
             card.transform.SetParent(this.transform);
         });
         outsideCards.Clear();
