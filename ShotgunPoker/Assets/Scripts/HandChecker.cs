@@ -156,4 +156,32 @@ public class PokerHand {
         if (isHighCard) return "High card";
         return "Miss";
     }
+
+    public int getPoint() {
+        string name = getName();
+        switch(name) {
+            case "One pair":
+                return 1;
+            case "Two pair":
+                return 10;
+            case "Three card":
+                return 30;
+            case "Four card":
+                return 80;
+            case "Five card":
+                return 100;
+            case "Full house":
+                return 70;
+            case "Royal Straight Flush":
+                return 300;
+            case "Straight Flush":
+                return 150;
+            case "Straight":
+                return 60;
+            case "Flush":
+                return 2;
+            default:
+                return -30;
+        }
+    }
 }
