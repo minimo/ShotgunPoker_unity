@@ -122,26 +122,6 @@ public class HandChecker : MonoBehaviour
         if (inJoker) result.isOnePair = true; else result.isHighCard = true;
         return result;
     }
-
-    public string getHandName(PokerHand hand) {
-        if (hand.isHighCard) return "High card";
-        if (hand.isOnePair) return "One pair";
-        if (hand.isTwoPair) return "Two pair";
-        if (hand.isThreeCard) return "Three card";
-        if (hand.isFourCard) return "Four card";
-        if (hand.isFiveCard) return "Five card";
-        if (hand.isFullHouse) return "Full house";
-        if (hand.isStraight) {
-            if (hand.isFlush) {
-                if (hand.isRoyal) return "Royal Straight Flush";
-                return "Straight Flush";
-            }
-            return "Straight";
-        }
-        if (hand.isFlush) return "Flush";
-        if (hand.isHighCard) return "High card";
-        return "Miss";
-    }
 }
 
 public class PokerHand {
@@ -156,4 +136,24 @@ public class PokerHand {
     public bool isStraight = false;
     public bool isRoyal = false;
     public bool isFullHouse = false;
+
+    public string getName() {
+        if (isHighCard) return "High card";
+        if (isOnePair) return "One pair";
+        if (isTwoPair) return "Two pair";
+        if (isThreeCard) return "Three card";
+        if (isFourCard) return "Four card";
+        if (isFiveCard) return "Five card";
+        if (isFullHouse) return "Full house";
+        if (isStraight) {
+            if (isFlush) {
+                if (isRoyal) return "Royal Straight Flush";
+                return "Straight Flush";
+            }
+            return "Straight";
+        }
+        if (isFlush) return "Flush";
+        if (isHighCard) return "High card";
+        return "Miss";
+    }
 }

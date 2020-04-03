@@ -50,7 +50,7 @@ public class GameController : MonoBehaviour
             float directionY = touchEndPos.y - touchStartPos.y;
             string flickDir = "";
             if (Mathf.Abs(directionY) < Mathf.Abs(directionX)) {
-                Debug.Log(deltaTime);
+                // Debug.Log(deltaTime);
                 if (Mathf.Abs(directionX) > 600) {
                     if (600 < directionX){
                         //右向きにフリック
@@ -182,7 +182,7 @@ public class GameController : MonoBehaviour
         });
 
         PokerHand result = GetComponent<HandChecker>().check(hands);
-        Debug.Log(GetComponent<HandChecker>().getHandName(result));
+        Debug.Log(result.getName());
     }
 
     //手札を場から下げる
@@ -196,7 +196,6 @@ public class GameController : MonoBehaviour
         });
         hands.Clear();
         isDisableTouch = false;
-        Debug.Log("exit card");
         if (outsideCards.Count > 19) returnCard();
     }
 
