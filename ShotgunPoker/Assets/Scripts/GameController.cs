@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 public class GameController : MonoBehaviour
 {
     [SerializeField] GameObject HandChecker;
+
+    List<GameObject> cardList = new List<GameObject>();
     List<GameObject> hands = new List<GameObject>();
     List<GameObject> outsideCards = new List<GameObject>();
 
@@ -18,6 +20,8 @@ public class GameController : MonoBehaviour
 
     private Vector3 touchStartPos;
     private Vector3 touchEndPos;
+
+    private float deltaTime = 0;
 
     void Start()
     {
@@ -31,20 +35,22 @@ public class GameController : MonoBehaviour
     void Update()
     {
         detectFlick();
+        deltaTime += Time.deltaTime;
     }
 
     void detectFlick(){
         if (Input.GetKeyDown(KeyCode.Mouse0)){
             touchStartPos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
+            deltaTime = 0;
         }
 
-        if (Input.GetKeyUp(KeyCode.Mouse0)){
+        if (Input.GetKeyUp(KeyCode.Mouse0) && deltaTime < 0.2f){
             touchEndPos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
             float directionX = touchEndPos.x - touchStartPos.x;
             float directionY = touchEndPos.y - touchStartPos.y;
             string flickDir = "";
             if (Mathf.Abs(directionY) < Mathf.Abs(directionX)) {
-                Debug.Log(directionX);
+                Debug.Log(deltaTime);
                 if (Mathf.Abs(directionX) > 600) {
                     if (600 < directionX){
                         //右向きにフリック
@@ -78,7 +84,6 @@ public class GameController : MonoBehaviour
 
     void setupCardDeck()
     {
-        List<GameObject> cards = new List<GameObject>();
         for (int s = 0; s < 4; s++) {
             for (int n = 0; n < 13; n++) {
                 float x = Random.Range(-2.0f, 2.0f);
@@ -87,18 +92,18 @@ public class GameController : MonoBehaviour
                 GameObject card = enterCard(s, n + 1, false);
                 card.transform.position = new Vector3(x, y, 0.0f);
                 card.transform.rotation = Quaternion.Euler(0.0f, 0.0f, r);
-                cards.Add(card);
+                cardList.Add(card);
             }
         }
         //シャッフル
-        for (int i = 0; i < cards.Count; i++) {
-            GameObject temp = cards[i];
-            int randomIndex = Random.Range(0, cards.Count);
-            cards[i] = cards[randomIndex];
-            cards[randomIndex] = temp;
+        for (int i = 0; i < cardList.Count; i++) {
+            GameObject temp = cardList[i];
+            int randomIndex = Random.Range(0, cardList.Count);
+            cardList[i] = cardList[randomIndex];
+            cardList[randomIndex] = temp;
         }
         int count = 0;
-        cards.ForEach(card => {
+        cardList.ForEach(card => {
             Vector3 p = card.transform.position;
             card.transform.position = new Vector3(p.x, p.y);
             card.GetComponent<Card>().setZOrder(count + 1);
@@ -209,5 +214,20 @@ public class GameController : MonoBehaviour
             card.transform.SetParent(this.transform);
         });
         outsideCards.Clear();
+
+        //下げ札を含めた表示順のシャッフル
+        for (int i = 0; i < cardList.Count; i++) {
+            GameObject temp = cardList[i];
+            int randomIndex = Random.Range(0, cardList.Count);
+            cardList[i] = cardList[randomIndex];
+            cardList[randomIndex] = temp;
+        }
+        int count = 0;
+        cardList.ForEach(card => {
+            Vector3 p = card.transform.position;
+            card.transform.position = new Vector3(p.x, p.y);
+            card.GetComponent<Card>().setZOrder(count + 1);
+            count++;
+        });
     }
 }
