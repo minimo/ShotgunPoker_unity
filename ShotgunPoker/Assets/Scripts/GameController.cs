@@ -5,11 +5,10 @@ using DG.Tweening;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using TMPro;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] GameObject HandChecker;
-
     List<GameObject> cardList = new List<GameObject>();
     List<GameObject> hands = new List<GameObject>();
     List<GameObject> outsideCards = new List<GameObject>();
@@ -22,6 +21,8 @@ public class GameController : MonoBehaviour
     private Vector3 touchEndPos;
 
     private float deltaTime = 0;
+
+    [SerializeField] GameObject handText;
 
     void Start()
     {
@@ -183,6 +184,8 @@ public class GameController : MonoBehaviour
 
         PokerHand result = GetComponent<HandChecker>().check(hands);
         Debug.Log(result.getName());
+        handText.GetComponent<TextMeshProUGUI>().text = result.getName();
+        handText.GetComponent<RectTransform>().DOMove(new Vector3(0.0f, -500.0f, 0.0f), 0.5f);
     }
 
     //手札を場から下げる
