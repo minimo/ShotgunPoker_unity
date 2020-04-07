@@ -9,6 +9,7 @@ using TMPro;
 
 public class GameController : MonoBehaviour
 {
+    int score = 0;
     List<GameObject> cardList = new List<GameObject>();
     List<GameObject> hands = new List<GameObject>();
     List<GameObject> outsideCards = new List<GameObject>();
@@ -23,6 +24,7 @@ public class GameController : MonoBehaviour
     private float deltaTime = 0;
 
     [SerializeField] GameObject handText;
+    [SerializeField] GameObject scoreText;
 
     void Start()
     {
@@ -81,7 +83,6 @@ public class GameController : MonoBehaviour
             }
         }
     }
-
 
     void setupCardDeck()
     {
@@ -183,9 +184,11 @@ public class GameController : MonoBehaviour
         });
 
         PokerHand result = GetComponent<HandChecker>().check(hands);
-        Debug.Log(result.getName());
         handText.GetComponent<TextMeshProUGUI>().text = result.getName();
         handText.GetComponent<RectTransform>().DOMove(new Vector3(0.0f, -500.0f, 0.0f), 0.5f);
+        scoreText.GetComponent<ScoreText>().addScore(result.getPoint());
+        Debug.Log(result.getName());
+        Debug.Log(result.getPoint());
     }
 
     //手札を場から下げる

@@ -181,7 +181,7 @@ public class PokerHand {
             case "Flush":
                 return 2;
             default:
-                return -30;
+                return 0;
         }
     }
 }
