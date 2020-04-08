@@ -6,9 +6,9 @@ using TMPro;
 public class ScoreText : MonoBehaviour
 {
     public int score = 0;
-    public int dispScore = 0;
+    int dispScore = 0;
 
-    public int difference = 0;
+    int difference = 0;
     TextMeshProUGUI textMesh;
     // Start is called before the first frame update
     void Start()
@@ -19,8 +19,13 @@ public class ScoreText : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        dispScore += difference;
-        if (dispScore > score) dispScore = score;
+        if (difference != 0) {
+            dispScore += difference;
+            if (difference > 0 &&  dispScore > score || difference < 0 &&  dispScore < score) {
+                dispScore = score;
+                difference = 0;
+            }
+        }
         textMesh.text = "Score " + dispScore;
     }
 
