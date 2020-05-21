@@ -13,47 +13,82 @@ public class GameController : MonoBehaviour
     List<GameObject> cardList = new List<GameObject>();
     List<GameObject> hands = new List<GameObject>();
     List<GameObject> outsideCards = new List<GameObject>();
+    List<GameObject> lifeList = new List<GameObject>();
 
     GameObject outSide;
 
-    bool isDisableTouch = false;
+    [SerializeField] int maxLife = 5;
+    int initialLife = 3;
+    int life;
+
+    float maxTimeLimit = 10.0f;
+
+    bool isStart = false;
+    bool isDisableTouch = true;
 
     private Vector3 touchStartPos;
     private Vector3 touchEndPos;
 
-    private float deltaTime = 0;
+    private float flickDeltaTime = 0;
 
-    [SerializeField] GameObject handText;
-    [SerializeField] GameObject scoreText;
+    GameObject titleText;
+    GameObject handText;
+    GameObject scoreText;
+    GameObject gameoverText;
+    GameObject hud;
 
     void Start()
     {
+        life = initialLife;
+
         outSide = new GameObject();
         outSide.name = "OutSide";
         outSide.transform.SetParent(this.transform);
+
+        titleText = GameObject.Find("TitleText");
+        handText = GameObject.Find("HandText");
+        scoreText = GameObject.Find("ScoreText");
+        gameoverText = GameObject.Find("GameOverText");
+        hud = GameObject.Find("HUD");
+
+        gameoverText.SetActive(false);
+
         setupCardDeck();
+        setupDispLife();
     }
 
     // Update is called once per frame
     void Update()
     {
-        detectFlick();
-        deltaTime += Time.deltaTime;
+        if (isStart) {
+            detectFlick();
+            flickDeltaTime += Time.deltaTime;
+        } else {
+            if (Input.GetMouseButtonDown(0)) {
+                isStart = true;
+                titleText.SetActive(false);
+                returnCard(2.0f, 2.0f);
+            }
+        }
+    }
+
+    void gameover() {
+        this.isDisableTouch = true;
+        gameoverText.SetActive(true);
     }
 
     void detectFlick(){
         if (Input.GetKeyDown(KeyCode.Mouse0)){
             touchStartPos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
-            deltaTime = 0;
+            flickDeltaTime = 0;
         }
 
-        if (Input.GetKeyUp(KeyCode.Mouse0) && deltaTime < 0.2f){
+        if (Input.GetKeyUp(KeyCode.Mouse0) && flickDeltaTime < 0.2f){
             touchEndPos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
             float directionX = touchEndPos.x - touchStartPos.x;
             float directionY = touchEndPos.y - touchStartPos.y;
             string flickDir = "";
             if (Mathf.Abs(directionY) < Mathf.Abs(directionX)) {
-                // Debug.Log(deltaTime);
                 if (Mathf.Abs(directionX) > 600) {
                     if (600 < directionX){
                         //右向きにフリック
@@ -84,12 +119,40 @@ public class GameController : MonoBehaviour
         }
     }
 
+    void setupDispLife() {
+        for (int i = 0; i < maxLife; i++) {
+            GameObject card;
+            card = Instantiate((GameObject)Resources.Load("PreFab/Card"));
+            card.GetComponent<Card>().setData(3, 1, false);
+            card.GetComponent<Card>().setZOrder(1);
+            card.transform.position = new Vector3(-4.5f + i * 1.3f, 9.5f, 20.0f);
+            card.transform.SetParent(hud.transform, false);
+            lifeList.Add(card);
+            if (initialLife <= i) card.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
+        }
+    }
+
+    void addLife(int num) {
+        if (num == 0) return;
+        if (num > 0) {
+            for (int i = 0; i < num; i++) {
+                lifeList[life + i - 1].transform.DOScale(Vector3.one, 0.5f);
+            }
+        } else {
+            for (int i = 0; i < Mathf.Abs(num); i++) {
+                lifeList[life - i - 1].transform.DOScale(Vector3.zero, 0.5f);
+            }
+        }
+        life += num;
+    }
+
     void setupCardDeck()
     {
         for (int s = 0; s < 4; s++) {
             for (int n = 0; n < 13; n++) {
                 float x = Random.Range(-2.0f, 2.0f);
-                float y = Random.Range(-3.0f, 3.0f);
+                // float y = Random.Range(-3.0f, 3.0f);
+                float y = -10.0f;
                 float r = Random.Range(0, 359);
                 GameObject card = enterCard(s, n + 1, false);
                 card.transform.position = new Vector3(x, y, 0.0f);
@@ -184,9 +247,17 @@ public class GameController : MonoBehaviour
         });
 
         PokerHand result = GetComponent<HandChecker>().check(hands);
-        handText.GetComponent<TextMeshProUGUI>().text = result.getName();
+        string handName = result.getName();
+        handText.GetComponent<TextMeshProUGUI>().text = handName;
         handText.GetComponent<RectTransform>().DOMove(new Vector3(0.0f, -500.0f, 0.0f), 0.5f);
         scoreText.GetComponent<ScoreText>().addScore(result.getPoint());
+        if (handName == "Miss" || handName == "High card") {
+            if (life > 0) {
+                addLife(-1);
+            } else {
+                gameover();
+            }
+        }
         Debug.Log(result.getName());
         Debug.Log(result.getPoint());
     }
@@ -206,7 +277,7 @@ public class GameController : MonoBehaviour
     }
 
     //下げられたカードを場に戻す
-    void returnCard() {
+    void returnCard(float moveDuration = 0.5f, float rotateDuration = 0.5f) {
         shuffle();
         outsideCards.ForEach(card => {
             Vector3 p = card.transform.position;
@@ -214,8 +285,8 @@ public class GameController : MonoBehaviour
             float y = Random.Range(-3.0f, 3.0f);
             float r = Random.Range(0, 359);
             card.transform.position = new Vector3(x, p.y);
-            card.transform.DOMove(new Vector3(x, y), 0.5f).SetEase(Ease.OutQuad);
-            card.transform.DORotate(new Vector3(0, 0, r), 0.5f);
+            card.transform.DOMove(new Vector3(x, y), moveDuration).SetEase(Ease.OutSine);
+            card.transform.DORotate(new Vector3(0, 0, r), rotateDuration);
             card.transform.SetParent(this.transform);
         });
         outsideCards.Clear();
@@ -234,5 +305,17 @@ public class GameController : MonoBehaviour
             card.GetComponent<Card>().setZOrder(count + 1);
             count++;
         });
+    }
+    void exitAllCard() {
+        int count = 0;
+        hands.ForEach(card => {
+            Vector3 p = card.transform.position;
+            card.transform.DOMove(new Vector3(p.x, p.y - 3.0f), 0.2f);
+            outsideCards.Add(card);
+            count++;
+        });
+        hands.Clear();
+        isDisableTouch = false;
+        if (outsideCards.Count > 19) returnCard();
     }
 }
