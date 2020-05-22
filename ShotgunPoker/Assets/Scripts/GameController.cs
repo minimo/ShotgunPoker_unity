@@ -18,12 +18,12 @@ public class GameController : MonoBehaviour
     GameObject outSide;
 
     [SerializeField] int maxLife = 5;
-    int initialLife = 3;
+    int initialLife = 0;
     int life;
 
     float maxTimeLimit = 10.0f;
 
-    bool isStart = false;
+    string state = "title";
     bool isDisableTouch = true;
 
     private Vector3 touchStartPos;
@@ -39,7 +39,7 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        life = initialLife;
+        life = 0;
 
         outSide = new GameObject();
         outSide.name = "OutSide";
@@ -60,20 +60,31 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isStart) {
-            detectFlick();
-            flickDeltaTime += Time.deltaTime;
-        } else {
-            if (Input.GetMouseButtonDown(0)) {
-                isStart = true;
-                titleText.SetActive(false);
-                returnCard(2.0f, 2.0f);
-            }
+        switch (state) {
+            case "title":
+                if (Input.GetMouseButtonDown(0)) {
+                    state = "game";
+                    titleText.SetActive(false);
+                    addLife(initialLife);
+                    returnCard();
+                }
+                break;
+            case "game":
+                detectFlick();
+                flickDeltaTime += Time.deltaTime;
+                break;
+            case "gameover":
+                if (Input.GetMouseButtonDown(0)) {
+                    state = "title";
+                    titleText.SetActive(true);
+                    gameoverText.SetActive(false);
+                }
+                break;
         }
     }
 
     void gameover() {
-        this.isDisableTouch = true;
+        state = "gameover";
         gameoverText.SetActive(true);
     }
 
@@ -126,9 +137,9 @@ public class GameController : MonoBehaviour
             card.GetComponent<Card>().setData(3, 1, false);
             card.GetComponent<Card>().setZOrder(1);
             card.transform.position = new Vector3(-4.5f + i * 1.3f, 9.5f, 20.0f);
+            card.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
             card.transform.SetParent(hud.transform, false);
             lifeList.Add(card);
-            if (initialLife <= i) card.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
         }
     }
 
@@ -136,7 +147,7 @@ public class GameController : MonoBehaviour
         if (num == 0) return;
         if (num > 0) {
             for (int i = 0; i < num; i++) {
-                lifeList[life + i - 1].transform.DOScale(Vector3.one, 0.5f);
+                lifeList[life + i].transform.DOScale(new Vector3(0.1f, 0.1f, 0.1f), 0.5f);
             }
         } else {
             for (int i = 0; i < Mathf.Abs(num); i++) {
@@ -188,7 +199,7 @@ public class GameController : MonoBehaviour
 
     public void addHand(GameObject card)
     {
-        if (isDisableTouch) return;
+        if (isDisableTouch || state != "game") return;
         card.transform.SetParent(outSide.transform);
         float x = -1.0f + hands.Count * 0.5f;
         float y = -5.0f;
@@ -241,7 +252,7 @@ public class GameController : MonoBehaviour
                 .Append(card.transform.DOMove(new Vector3(x, -5.0f, count * -0.00f), 0.2f));
             if (count == 4) {
                 seq.AppendInterval(1.0f)
-                    .AppendCallback(() => exitCard());
+                    .AppendCallback(() => exitHandCard());
             }
             count++;
         });
@@ -263,7 +274,7 @@ public class GameController : MonoBehaviour
     }
 
     //手札を場から下げる
-    void exitCard() {
+    void exitHandCard() {
         int count = 0;
         hands.ForEach(card => {
             Vector3 p = card.transform.position;
@@ -273,7 +284,11 @@ public class GameController : MonoBehaviour
         });
         hands.Clear();
         isDisableTouch = false;
-        if (outsideCards.Count > 19) returnCard();
+        if (outsideCards.Count > 19 && state == "game") returnCard();
+    }
+
+    void exitAllCard() {
+        
     }
 
     //下げられたカードを場に戻す
@@ -305,17 +320,5 @@ public class GameController : MonoBehaviour
             card.GetComponent<Card>().setZOrder(count + 1);
             count++;
         });
-    }
-    void exitAllCard() {
-        int count = 0;
-        hands.ForEach(card => {
-            Vector3 p = card.transform.position;
-            card.transform.DOMove(new Vector3(p.x, p.y - 3.0f), 0.2f);
-            outsideCards.Add(card);
-            count++;
-        });
-        hands.Clear();
-        isDisableTouch = false;
-        if (outsideCards.Count > 19) returnCard();
     }
 }
