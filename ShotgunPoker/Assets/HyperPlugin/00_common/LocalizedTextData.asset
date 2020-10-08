@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1430cceee9813e40b6e20a9d6738d1b, type: 3}
+  m_Name: LocalizedTextData
+  m_EditorClassIdentifier: 
+  texts:
+  - key: gametitle
+    ja_JP: "\u30B5\u30F3\u30D7\u30EB\u30B2\u30FC\u30E0"
+    en_US: Sample Game
+    zh_CN: "\u8303\u4F8B\u6E38\u620F"
+  - key: taptostart
+    ja_JP: TAP TO START
+    en_US: TAP TO START
+    zh_CN: TAP TO START
+  - key: version
+    ja_JP: "\u30D0\u30FC\u30B8\u30E7\u30F3\u60C5\u5831"
+    en_US: about
+    zh_CN: about
+  - key: credit
+    ja_JP: "\u30AF\u30EC\u30B8\u30C3\u30C8"
+    en_US: credit
+    zh_CN: credit
+  - key: license
+    ja_JP: "\u30E9\u30A4\u30BB\u30F3\u30B9"
+    en_US: license
+    zh_CN: license
+  - key: privacy policy
+    ja_JP: "\u30D7\u30E9\u30A4\u30D0\u30B7\u30FC\u30DD\u30EA\u30B7\u30FC"
+    en_US: privacy policy
+    zh_CN: privacy policy
+  - key: basic_dialog
+    ja_JP: "\u30C0\u30A4\u30A2\u30ED\u30B0"
+    en_US: BASIC DIALOG
+    zh_CN: "\u30C0\u30A4\u30A2\u30ED\u30B0\u30FC"
+  - key: ok
+    ja_JP: OK
+    en_US: OK
+    zh_CN: OK
+  - key: cancel
+    ja_JP: "\u30AD\u30E3\u30F3\u30BB\u30EB"
+    en_US: CANCEL
+    zh_CN: CANCEL
+  - key: start
+    ja_JP: "\u30B9\u30BF\u30FC\u30C8"
+    en_US: START
+    zh_CN: "\u958B\u59CB"
+  - key: cancel
+    ja_JP: "\u30AD\u30E3\u30F3\u30BB\u30EB"
+    en_US: CANCEL
+    zh_CN: CANCEL
+  - key: confirm_movie
+    ja_JP: "\u52D5\u753B\u3092\u898B\u308D\uFF01"
+    en_US: Watch Video
+    zh_CN: "\u89C2\u770B\u89C6\u9891"
+  - key: yes
+    ja_JP: "\u306F\u3044"
+    en_US: Yes
+    zh_CN: "\u662F"
+  - key: no
+    ja_JP: "\u3044\u3044\u3048"
+    en_US: No
+    zh_CN: "\u5426"
+  - key: stamina
+    ja_JP: "\u30B9\u30BF\u30DF\u30CA"
+    en_US: Stamina
+    zh_CN: "\u9162\u7530\u5473\u540D"
+  - key: no
+    ja_JP: "\u3044\u3044\u3048"
+    en_US: No
+    zh_CN: "\u5426"
+  - key: no
+    ja_JP: "\u3044\u3044\u3048"
+    en_US: No
+    zh_CN: "\u5426"
+  - key: no
+    ja_JP: "\u3044\u3044\u3048"
+    en_US: No
+    zh_CN: "\u5426"
+  - key: no
+    ja_JP: "\u3044\u3044\u3048"
+    en_US: No
+    zh_CN: "\u5426"
+  - key: no
+    ja_JP: "\u3044\u3044\u3048"
+    en_US: No
+    zh_CN: "\u5426"
